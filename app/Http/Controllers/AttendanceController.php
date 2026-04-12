@@ -36,6 +36,41 @@ class AttendanceController extends Controller
         }
     }
 
+
+
+    public function deviceInfo()
+    {
+        $ip = $this->ip_address;
+        $port = $this->port;
+        $zk = new ZKTeco($ip, $port);
+
+        try {
+            if (!$zk->connect()) {
+                return back()->with('error', 'Device connect failed');
+            }
+
+
+            $deviceInfo = [
+                'ip'        => $ip,
+                'port'      => $port,
+                'platform'  => $zk->platform(),
+                'os'        => $zk->osVersion(),
+                'firmware'  => $zk->fmVersion(),
+                'serial'    => $zk->serialNumber(),
+                'device_name' => $zk->deviceName(),
+                'time'      => $zk->getTime(),
+            ];
+
+            // dd($deviceInfo);
+
+            $zk->disconnect();
+
+            return view('device', compact('deviceInfo'));
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
     // $users = $this->zk->getUser();
     // $this->addUser($request);
     // $this->clearOldAttendance();
