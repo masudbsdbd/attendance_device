@@ -178,6 +178,36 @@ class AttendanceController extends Controller
     }
 
 
+    public function EditUser(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'uid' => 'required|string|max:9',
+            'userid' => 'required|string|max:9',
+            'name' => 'required|string|max:24',
+            'password' => 'required|string|max:8',
+            'cardno' => 'required',
+        ]);
+        try {
+
+
+            $uid       = $request->uid;
+            $userid    = $request->userid; // only numbers
+            $name      = $request->name;
+            $password  = $request->password;
+            $role      = 0;
+            $cardno    = $request->cardno;
+
+            $this->zk->setUser($uid, $userid, $name, $password, $role, $cardno);
+            $this->zk->disconnect();
+
+            return redirect()->back()->with('success', 'User updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e);
+        }
+    }
+
+
     public function deleteUser($uid)
     {
         try {
