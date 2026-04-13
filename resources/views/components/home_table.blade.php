@@ -39,7 +39,7 @@
                         </td>
                         <td class="py-4 px-6 border-b border-gray-200">
                             <button command="show-modal" commandfor="dialog_new_{{ $user['uid'] }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-500 rounded">Edit</button>
-                            <form action="/deleteUser/{{ $user['uid'] }}" method="post">
+                            <form action="/deleteUser/{{ $user['uid'] }}/{{ $current_device_id }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded">Delete</button>

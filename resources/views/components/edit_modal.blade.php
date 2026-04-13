@@ -8,7 +8,7 @@
                         <h1 class="text-2xl pl-5 font-bold">Create User</h1>
                         {{-- start --}}
                             <div class="flex min-h-full flex-col justify-center px-6 lg:px-8 pb-10">
-                                <form action="{{ route("edituser") }}" method="POST" class="space-y-6">
+                                <form action="{{ route("edituser", $current_device_id) }}" method="POST" class="space-y-6">
                                     @csrf
                                     @method('PATCH')
                                     <div class="mt-2">

@@ -230,7 +230,7 @@ class AttendanceController extends Controller
             $userid    = $request->userid; // only numbers
             $name      = $request->name;
             $password  = $request->password;
-            $role      = 0;
+            $role      = 14; // admin 14 , user 4
             $cardno    = $request->cardno;
 
             $this->zk->setUser($uid, $userid, $name, $password, $role, $cardno);

@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Device Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="bg-gray-100 min-h-screen">
+@extends('layouts.MainLayout')
+@section('section')
 
 <div class="max-w-5xl mx-auto py-10 px-4">
-
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-800">⚙️ Device Dashboard</h1>
@@ -35,14 +28,14 @@
 
         @php
             $items = [
-                'IP Address' => $deviceInfo['ip'],
-                'Port' => $deviceInfo['port'],
-                'Platform' => $deviceInfo['platform'],
-                'Operating System' => $deviceInfo['os'],
-                'Firmware' => $deviceInfo['firmware'],
-                'Serial Number' => $deviceInfo['serial'],
-                'Device Name' => $deviceInfo['device_name'],
-                'Current Time' => $deviceInfo['time'],
+                'IP Address' => $zktDeviceConfiguration['ip'],
+                'Port' => $zktDeviceConfiguration['port'],
+                'Platform' => $zktDeviceConfiguration['platform'],
+                'Operating System' => $zktDeviceConfiguration['os'],
+                'Firmware' => $zktDeviceConfiguration['firmware'],
+                'Serial Number' => $zktDeviceConfiguration['serial'],
+                'Device Name' => $zktDeviceConfiguration['device_name'],
+                'Current Time' => $zktDeviceConfiguration['time'],
             ];
         @endphp
 
@@ -68,15 +61,15 @@
         <div class="flex flex-wrap gap-4">
 
             <!-- Test Sound -->
-            <form method="POST" action="/device/test-sound">
+            <form method="POST" action="/device/test-sound/{{ $current_device_id }}">
                 @csrf
-                <button class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-xl transition shadow">
+                <button class="cursor-pointer flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-xl transition shadow">
                     🔊 Test Sound
                 </button>
             </form>
 
             <!-- Restart -->
-            <form method="POST" action="/device/restart">
+            <form method="POST" action="/device/restart/{{ $current_device_id }}">
                 @csrf
                 <button class="flex items-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-xl transition shadow">
                     🔄 Restart
@@ -84,7 +77,7 @@
             </form>
 
             <!-- Shutdown -->
-            <form method="POST" action="/device/shutdown">
+            <form method="POST" action="/device/shutdown/{{ $current_device_id }}">
                 @csrf
                 <button onclick="return confirm('Are you sure? Device will shutdown!')"
                         class="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl transition shadow">
@@ -97,6 +90,4 @@
     </div>
 
 </div>
-
-</body>
-</html>
+@endsection

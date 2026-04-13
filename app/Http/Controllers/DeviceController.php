@@ -3,85 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use App\Models\InOut;
 use App\Models\ZktecoDevices;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Rats\Zkteco\Lib\ZKTeco;
-use Illuminate\Support\Facades\Http;
-
+use App\Repositories\Contracts\ZktecoConnectInterface as ZktDevice;
 
 
 class DeviceController extends Controller
 {
-
-    private $zk;
-    private $apiUrl;
-    private $ip_address;
-    private $port;
-
-    public function __construct()
+    public function index()
     {
-        $this->apiUrl = "https://bsderp.test/api";
-        $this->ip_address = "192.168.0.201";
-        $this->port = 4370; // Default to 4370 if not provided
-        $this->zk = new ZKTeco($this->ip_address, $this->port);
-        if ($this->zk->connect()) {
-            Log::info('Device connection successful');
-        } else {
-            Log::info('Failed to connect to ZKTeco device');
-            return;
-        }
+        $devices = ZktecoDevices::latest()->get();
+        $attendances = Attendance::latest()->get();
+        return view('device.manageDevice', compact('devices'));
     }
 
-
-
-    public function deviceInfo()
+    // Store device
+    public function store(Request $request)
     {
-        $ip = $this->ip_address;
-        $port = $this->port;
-        $zk = new ZKTeco($ip, $port);
+        ZktecoDevices::create($request->all());
+        return back()->with('success', 'Device added!');
+    }
 
+    // Delete
+    public function destroy($id)
+    {
+        ZktecoDevices::findOrFail($id)->delete();
+        return back()->with('success', 'Device deleted!');
+    }
+
+    // device configuration
+    public function deviceInfo(Request $request, ZktDevice $zktDevice, $device_id)
+    {
         try {
-            if (!$zk->connect()) {
-                return back()->with('error', 'Device connect failed');
-            }
-
-
-            $deviceInfo = [
-                'ip'        => $ip,
-                'port'      => $port,
-                'platform'  => $zk->platform(),
-                'os'        => $zk->osVersion(),
-                'firmware'  => $zk->fmVersion(),
-                'serial'    => $zk->serialNumber(),
-                'device_name' => $zk->deviceName(),
-                'time'      => $zk->getTime(),
-            ];
-
-            // dd($deviceInfo);
-
-            $zk->disconnect();
-
-            return view('device.device', compact('deviceInfo'));
+            session(['current_device_id' => $device_id]);
+            $deviceInfo = $zktDevice->deviceInfo($device_id);
+            $zktDeviceConfiguration = $zktDevice->deviceConfiguration($device_id);
+            return view('device.deviceInfo', compact('zktDeviceConfiguration', 'deviceInfo'));
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
 
 
-    public function testSound()
+    public function testSound(ZktDevice $zktDevice, $device_id)
     {
-        $zk = new ZKTeco($this->ip_address, $this->port);
-
         try {
-            if ($zk->connect()) {
-                $zk->testVoice();
-                $zk->disconnect();
-            }
-
+            $zktDevice->soundTest($device_id);
             return back()->with('success', 'Sound played!');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -89,16 +56,10 @@ class DeviceController extends Controller
     }
 
 
-    public function restartDevice()
+    public function restartDevice(ZktDevice $zktDevice, $device_id)
     {
-        $zk = new ZKTeco($this->ip_address, $this->port);
-
         try {
-            if ($zk->connect()) {
-                $zk->restart();
-                $zk->disconnect();
-            }
-
+            $zktDevice->restartDevice($device_id);
             return back()->with('success', 'Device restarting...');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
@@ -106,16 +67,10 @@ class DeviceController extends Controller
     }
 
 
-    public function shutdownDevice()
+    public function shutdownDevice(ZktDevice $zktDevice, $device_id)
     {
-        $zk = new ZKTeco($this->ip_address, $this->port);
-
         try {
-            if ($zk->connect()) {
-                $zk->shutdown();
-                $zk->disconnect();
-            }
-
+            $zktDevice->shutdownDevice($device_id);
             return back()->with('success', 'Device shutting down...');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
