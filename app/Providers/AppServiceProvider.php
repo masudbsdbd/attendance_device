@@ -8,6 +8,8 @@ use App\Repositories\ZktecoConnect;
 use App\Repositories\Contracts\ZktecoConnectInterface;
 use App\Repositories\ZktecoUser;
 use App\Repositories\Contracts\ZktecoUserInterface;
+use App\Repositories\ZktecoAttendance;
+use App\Repositories\Contracts\ZktecoAttendanceInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ZktecoConnectInterface::class, ZktecoConnect::class);
         $this->app->bind(ZktecoUserInterface::class, ZktecoUser::class);
+        $this->app->bind(ZktecoAttendanceInterface::class, ZktecoAttendance::class);
     }
 
     /**

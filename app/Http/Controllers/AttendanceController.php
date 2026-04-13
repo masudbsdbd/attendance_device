@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Rats\Zkteco\Lib\ZKTeco;
 use Illuminate\Support\Facades\Http;
+use App\Repositories\Contracts\ZktecoConnectInterface as ZktDevice;
+use App\Repositories\Contracts\ZktecoUserInterface as ZktUser;
+use App\Repositories\Contracts\ZktecoAttendanceInterface as ZktAttendance;
 
 
 
@@ -36,39 +39,10 @@ class AttendanceController extends Controller
         }
     }
 
-
-
-    public function deviceInfo()
+    public function attendanceLog(ZktDevice $zktdevice, ZktAttendance $zktAttendance, $device_id)
     {
-        $ip = $this->ip_address;
-        $port = $this->port;
-        $zk = new ZKTeco($ip, $port);
-
-        try {
-            if (!$zk->connect()) {
-                return back()->with('error', 'Device connect failed');
-            }
-
-
-            $deviceInfo = [
-                'ip'        => $ip,
-                'port'      => $port,
-                'platform'  => $zk->platform(),
-                'os'        => $zk->osVersion(),
-                'firmware'  => $zk->fmVersion(),
-                'serial'    => $zk->serialNumber(),
-                'device_name' => $zk->deviceName(),
-                'time'      => $zk->getTime(),
-            ];
-
-            // dd($deviceInfo);
-
-            $zk->disconnect();
-
-            return view('device', compact('deviceInfo'));
-        } catch (\Exception $e) {
-            return back()->with('error', $e->getMessage());
-        }
+        $attendanceRecords = $zktAttendance->attendanceLog($zktdevice, $device_id);
+        return view('attendances.attendanceManagement', compact('attendanceRecords'));
     }
 
     // $users = $this->zk->getUser();

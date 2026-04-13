@@ -6,5 +6,5 @@
         <button command="show-modal" commandfor="dialog" class="cursor-pointer rounded-md bg-cyan-600 px-5 py-3 text-sm font-semibold text-white hover:text-gray-900 hover:bg-cyan-200 ml-auto mb-3 mr-3">Add User</button>
     </div>
     @include("components.add_modal")
-    @include("components.home_table")
+    @include("components.user_table")
 @endsection

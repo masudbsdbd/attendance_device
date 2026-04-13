@@ -52,7 +52,7 @@
     <!-- Main content -->
     <div class="flex flex-col flex-1 overflow-y-auto">
         <div class="flex items-center justify-between h-16 bg-white border-b border-gray-200">
-            <div class="flex items-center px-4">
+            <div class="flex items-center px-4 py-10">
                 <div class="relative mx-auto text-gray-600">
                     <button type="submit" class="absolute right-1 top-0 mt-3 mr-4">
                             <svg class="text-gray-600 dark:text-gray-200 h-4 w-4 fill-current"

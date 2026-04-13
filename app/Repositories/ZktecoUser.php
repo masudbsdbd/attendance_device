@@ -2,10 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
-use App\Models\ZktecoDevices;
-use Illuminate\Support\Facades\Log;
-use Rats\Zkteco\Lib\ZKTeco;
 use App\Repositories\Contracts\ZktecoUserInterface;
 
 class ZktecoUser implements ZktecoUserInterface
