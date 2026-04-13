@@ -39,7 +39,7 @@ class ZktecoUser implements ZktecoUserInterface
         $userid    = $request->userid; // only numbers
         $name      = $request->name;
         $password  = $request->password;
-        $role      = 0;
+        $role      =  $request->role;
         $cardno    = "0012694937";
 
         $zk->setUser($uid, $userid, $name, $password, $role, $cardno);

@@ -25,7 +25,7 @@
                         {{ $attendance['type'] }}
                     </td>
                     <td class="py-4 px-6 border-b border-gray-200">
-                        {{ $attendance['timestamp'] }}
+                        {{ dateTimeConverter($attendance['timestamp']) }}
                     </td>
                 </tr>
             @endforeach

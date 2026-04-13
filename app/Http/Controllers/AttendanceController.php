@@ -19,7 +19,7 @@ use App\Repositories\Contracts\ZktecoAttendanceInterface as ZktAttendance;
 
 class AttendanceController extends Controller
 {
-
+    // $this->zk->setTime($currentTime);
     private $zk;
     private $apiUrl;
     private $ip_address;
@@ -45,18 +45,17 @@ class AttendanceController extends Controller
         return view('attendances.attendanceManagement', compact('attendanceRecords'));
     }
 
-    // $users = $this->zk->getUser();
-    // $this->addUser($request);
-    // $this->clearOldAttendance();
-    // $this->zk->setTime($currentTime);
-    // $this->zk->disconnect();
-    // exit;
-
-    public function getUsers(Request $request)
+    public function clearAttendanceLog(ZktDevice $zktdevice, ZktAttendance $zktAttendance, $device_id)
     {
-        $users = $this->zk->getUser();
-        return view('users.index', compact('users'));
+        try {
+            $zktAttendance->clearAttendanceLog($zktdevice, $device_id);
+            return redirect()->back()->with('success', 'Attendance log cleared successfully!');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+
+
 
     public function index(Request $request)
     {
@@ -145,133 +144,6 @@ class AttendanceController extends Controller
             }
         } catch (\Exception $e) {
             // Log::error('Error processing attendance: ' . $e->getMessage());
-        }
-    }
-
-
-
-    public function addUser(Request $request)
-    {
-        $request->validate([
-            'uid' => 'required|string|max:9',
-            'userid' => 'required|string|max:9',
-            'name' => 'required|string|max:24',
-            'password' => 'required|string|max:8',
-        ]);
-
-        try {
-
-            $users = $this->zk->getUser();
-            foreach ($users as $user) {
-                if ($user['userid'] == $request->userid) {
-                    return redirect()->back()->with('error', 'User already exists!');
-                } else if ($user['uid'] == $request->uid) {
-                    return redirect()->back()->with('error', 'uid already exists!');
-                }
-            }
-
-            $uid       = $request->uid;
-            $userid    = $request->userid; // only numbers
-            $name      = $request->name;
-            $password  = $request->password;
-            $role      = 0;
-            $cardno    = "0012694937";
-
-            $this->zk->setUser($uid, $userid, $name, $password, $role, $cardno);
-            $this->zk->disconnect();
-
-            return redirect()->back()->with('success', 'User added successfully!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e);
-        }
-    }
-
-
-    public function EditUser(Request $request)
-    {
-        // dd($request->all());
-        $request->validate([
-            'uid' => 'required|string|max:9',
-            'userid' => 'required|string|max:9',
-            'name' => 'required|string|max:24',
-            'password' => 'required|string|max:8',
-            'cardno' => 'required',
-        ]);
-        try {
-
-
-            $uid       = $request->uid;
-            $userid    = $request->userid; // only numbers
-            $name      = $request->name;
-            $password  = $request->password;
-            $role      = 14; // admin 14 , user 4
-            $cardno    = $request->cardno;
-
-            $this->zk->setUser($uid, $userid, $name, $password, $role, $cardno);
-            $this->zk->disconnect();
-
-            return redirect()->back()->with('success', 'User updated successfully!');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e);
-        }
-    }
-
-
-    public function deleteUser($uid)
-    {
-        try {
-            $result = $this->zk->removeUser($uid);
-            Log::info("Delete User Success: " . $result);
-            $this->zk->disconnect();
-
-            return redirect()->back()->with('success', 'User deleted successfully!');
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-
-
-    public function clearOldAttendance()
-    {
-        $ip   = '192.168.0.201';
-        $port = 4370;
-
-        $zk = new ZKTeco($ip, $port);
-
-        try {
-            if (!$zk->connect()) {
-                return response()->json(['status' => 'error', 'message' => 'Connection failed']);
-            }
-
-            // আগে সব logs নিয়ে ডাটাবেসে সেভ করো (নিরাপদ)
-            $allLogs = $zk->getAttendance();
-
-            if (!empty($allLogs)) {
-                // এখানে তোমার save logic চালাও (updateOrCreate)
-                // foreach (...) { Attendance::updateOrCreate(...); }
-                echo "Total " . count($allLogs) . " records backed up.<br>";
-            }
-
-            // এখন clear করো
-            $result = $zk->clearAttendance();
-
-            $zk->disconnect();
-
-            if ($result) {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'All attendance logs cleared from device successfully!'
-                ]);
-            } else {
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => 'Failed to clear logs'
-                ]);
-            }
-        } catch (\Exception $e) {
-            if (isset($zk)) $zk->disconnect();
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
     }
 }

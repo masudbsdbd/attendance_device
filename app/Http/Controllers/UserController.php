@@ -25,6 +25,7 @@ class UserController extends Controller
             'userid' => 'required|string|max:9',
             'name' => 'required|string|max:24',
             'password' => 'required|string|max:8',
+            'role' => 'required|numeric',
         ]);
         try {
             $res =  $zktUser->addUser($zktDevice, $request, $device_id);
