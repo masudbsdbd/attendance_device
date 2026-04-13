@@ -40,9 +40,10 @@ class ZktecoUser implements ZktecoUserInterface
         $name      = $request->name;
         $password  = $request->password;
         $role      =  $request->role;
-        $cardno    = "0012694937";
+        // $cardno    = "0012694937";
 
-        $zk->setUser($uid, $userid, $name, $password, $role, $cardno);
+        // $zk->setUser($uid, $userid, $name, $password, $role, $cardno);
+        $zk->setUser($uid, $userid, $name, $password, $role);
 
         $zk->disconnect();
 

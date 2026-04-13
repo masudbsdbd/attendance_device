@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Repositories\Contracts\ZktecoConnectInterface as ZktDevice;
@@ -14,7 +15,8 @@ class UserController extends Controller
     public function getUsers(Request $request, ZktDevice $zktDevice, ZktUser $zktUser, $device_id)
     {
         $users = $zktUser->getUsers($zktDevice, $device_id);
-        return view('users.index', compact('users'));
+        $roles = Role::where('device_id', $device_id)->get();
+        return view('users.index', compact('users', 'roles'));
     }
 
 

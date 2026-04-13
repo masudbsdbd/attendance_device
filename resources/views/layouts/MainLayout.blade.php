@@ -29,7 +29,7 @@
     <div class="flex h-screen bg-gray-100">
 
         <!-- sidebar -->
-        <div class="hidden md:flex flex-col w-64 bg-gray-800 rounded-2xl">
+        <div class="hidden md:flex flex-col w-64 bg-gray-800 rounded-2xl my-4 ml-2">
 
             <div class="flex flex-col flex-1 overflow-y-auto">
                 <nav

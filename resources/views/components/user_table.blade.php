@@ -26,7 +26,7 @@
                         </td>
                         <td class="py-4 px-6 border-b border-gray-200">
                             <span class="bg-green-500 text-white py-1 px-2 rounded-full text-xs">
-                                {{ empty($user['role']) ? 'n/a' : $user['role'] }}
+                                {{ roleConverter($current_device_id, $user['role']) }}
                             </span>
                         </td>
                         <td class="py-4 px-6 border-b border-gray-200">
@@ -35,14 +35,17 @@
                             </span>
                         </td>
                         <td class="py-4 px-6 border-b border-gray-200">
-                            {{ $user['cardno'] }}
+                            {{ $user['cardno'] == '0000000000' ? 'not set yet' : $user['cardno'] }}
+                            @if ($user['cardno'] != '0000000000')
+                                <i class="fa-solid fa-circle-check text-green-500"></i>
+                            @endif
                         </td>
                         <td class="py-4 px-6 border-b border-gray-200">
-                            <button command="show-modal" commandfor="dialog_new_{{ $user['uid'] }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-500 rounded">Edit</button>
+                            <button command="show-modal" commandfor="dialog_new_{{ $user['uid'] }}" class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-500 rounded">Edit</button>
                             <form action="/deleteUser/{{ $user['uid'] }}/{{ $current_device_id }}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded">Delete</button>
+                                <button class="cursor-pointer bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 border border-red-500 rounded">Delete</button>
                             </form>
                         </td>
                     </tr>

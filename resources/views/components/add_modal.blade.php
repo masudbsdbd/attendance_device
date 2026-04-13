@@ -18,7 +18,7 @@
                         </h2>
                         
                         <!-- Cross Button -->
-                        <button onclick="closeCreateModal()" 
+                        <button onclick="this.closest('dialog').close()" 
                                 class="cursor-pointer text-white hover:bg-white/20 p-2 rounded-full transition-all focus:outline-none">
                             <i class="fa-solid fa-rectangle-xmark"></i>
                         </button>
@@ -47,7 +47,7 @@
                         <!-- User ID -->
                         <div>
                             <label for="userid" class="block text-sm font-medium text-gray-700 mb-1.5">
-                                User ID / Username
+                                User ID
                             </label>
                             <input id="userid" type="text" name="userid" 
                                    placeholder="Enter username"
@@ -96,11 +96,15 @@
                                         class="block w-full appearance-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-base text-gray-900 
                                                focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all">
                                     <option value="">Select Role</option>
-                                    <option value="0">Normal User</option>
+                                    {{-- <option value="0">Normal User</option>
                                     <option value="14">Super Admin</option>
                                     <option value="4">Hr</option>
                                     <option value="8">Employee</option>
-                                    <option value="10">Accounts</option>
+                                    <option value="10">Accounts</option> --}}
+
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
+                                    @endforeach
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -135,7 +139,10 @@
 
 
 <script>
-    function closeCreateModal() {
-        document.getElementById('dialog').close();
+     function closeCreateModal(element) {
+        const dialog = element.closest('dialog');
+        if (dialog) {
+            dialog.close();
+        }
     }
 </script>

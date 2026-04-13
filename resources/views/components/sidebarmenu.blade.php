@@ -17,6 +17,12 @@
         Users
     </a>
 
+
+    <a href="{{ route("roles", $current_device_id) }}"
+        class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-400 hover:bg-opacity-25 rounded-2xl">
+        <i class="fa-solid fa-shield-halved text-2xl mr-2"></i> Role Mangement
+    </a>
+
     <a href="{{ route("attendance-log", $current_device_id) }}"
         class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-400 hover:bg-opacity-25 rounded-2xl">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
