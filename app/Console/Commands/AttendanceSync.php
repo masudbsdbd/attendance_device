@@ -7,6 +7,7 @@ use App\Models\InOut;
 use App\Models\ZktecoDevices;
 use Illuminate\Console\Command;
 use App\Repositories\Contracts\ZktecoConnectInterface as ZktDevice;
+use App\Repositories\Contracts\ZktecoAttendanceInterface as ZktAttendance;
 // use Illuminate\Container\Attributes\Log;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -32,7 +33,7 @@ class AttendanceSync extends Command
     /**
      * Execute the console command.
      */
-    public function handle(ZktDevice $zktDevice)
+    public function handle(ZktDevice $zktDevice, ZktAttendance $zktAttendance)
     {
         $apiUrl = "https://bsderp.test/api";
 
@@ -65,7 +66,7 @@ class AttendanceSync extends Command
                     }
                 }
 
-                // $zktAttendance->clearAttendanceLog($zktDevice, $device->id);
+                $zktAttendance->clearAttendanceLog($zktDevice, $device->id);
             }
         }
 
@@ -82,10 +83,7 @@ class AttendanceSync extends Command
 
 
                 if ($response['success'] == true) {
-                    // Attendance::where('device_id', $device->id)
-                    //     ->where('user_id', $record->user_id)
-                    //     ->where('timestamp', $record->timestamp)
-                    //     ->delete();
+                    Attendance::where('device_id', $device->id)->delete();
                 }
                 Log::info($response);
                 // }

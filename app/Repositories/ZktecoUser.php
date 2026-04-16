@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
 use App\Repositories\Contracts\ZktecoUserInterface;
 
 class ZktecoUser implements ZktecoUserInterface
@@ -47,6 +48,19 @@ class ZktecoUser implements ZktecoUserInterface
 
         $zk->disconnect();
 
+
+        // create user on local database
+        $user = User::firstOrCreate([
+            'uid' => $uid,
+            'userid' => $userid,
+        ], [
+            'name' => $name,
+            'password' => $password,
+            'role' => $role,
+            // 'cardno' => $cardno,
+        ]);
+
+
         return [
             'status' => 'success',
             'message' => 'User added successfully!'
@@ -67,6 +81,18 @@ class ZktecoUser implements ZktecoUserInterface
 
         $zk->setUser($uid, $userid, $name, $password, $role, $cardno);
         $zk->disconnect();
+
+
+        // create user on local database
+        User::updateOrCreate([
+            'uid' => $request->uid,
+            'userid' => $request->userid,
+        ], [
+            'name' => $request->name,
+            'password' => $request->password,
+            'role' => $request->role,
+            'cardno' => $cardno,
+        ]);
 
         return [
             'status' => 'success',

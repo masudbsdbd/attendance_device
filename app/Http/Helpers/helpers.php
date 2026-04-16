@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Role;
+use App\Models\User;
 use Carbon\Carbon;
 
 
@@ -19,4 +20,11 @@ function roleConverter($device_id, $role)
     } else {
         return 'N/A';
     }
+}
+
+
+function getName($userid)
+{
+    $user = User::where('userid', $userid)->first();
+    return empty($user) ? 'Unknown' : $user->name;
 }
