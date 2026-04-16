@@ -11,7 +11,7 @@
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">📡 Device Manager</h1>
+        <h1 class="text-3xl font-bold text-gray-800">📡 Device Manager {{session('current_device_id')}}</h1>
     </div>
 
     <!-- Alerts -->
@@ -110,11 +110,13 @@
                         Test
                     </a>
 
+                    
+                    
                     <!-- Delete Button -->
                     <form method="POST" action="/devices/{{ $device->id }}" class="col-span-1">
                         @csrf
                         @method('DELETE')
-                        <button onclick="return confirm('এই ডিভাইসটি ডিলিট করতে চান?')"
+                        <button onclick="return confirm('Are you sure you want to delete this device?')"
                                 class="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-2xl transition-all active:scale-[0.97]">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6h12v12" />

@@ -16,7 +16,7 @@ Route::delete("/deleteUser/{uid}/{device_id}", [UserController::class, 'deleteUs
 // Route::get('/addUser', [AttendanceController::class, 'addUser']);
 
 // crud device
-Route::get('/', [DeviceController::class, 'index']);
+Route::get('/', [DeviceController::class, 'index'])->name('device-manage');
 Route::post('/devices', [DeviceController::class, 'store']);
 Route::delete('/devices/{id}', [DeviceController::class, 'destroy']);
 Route::get('/device-info/{device_id}', [DeviceController::class, 'deviceInfo'])->name("device-info");
@@ -34,3 +34,6 @@ Route::get('/roles/{device_id}', [RoleController::class, 'index'])->name('roles'
 Route::post('/roles', [RoleController::class, 'store']);
 Route::put('/roles/{id}', [RoleController::class, 'update']);
 Route::delete('/roles/{id}', [RoleController::class, 'destroy']);
+
+
+Route::get('/logout', [DeviceController::class, 'logout'])->name("logout");

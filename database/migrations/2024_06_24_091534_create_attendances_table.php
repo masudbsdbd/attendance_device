@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
+            $table->integer('device_id');
             $table->integer('uid');
             $table->string('user_id');
             $table->boolean('state');
             $table->timestamp('timestamp');
             $table->integer('type');
             $table->timestamps();
-
         });
     }
 

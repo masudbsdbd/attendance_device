@@ -76,4 +76,10 @@ class DeviceController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function logout()
+    {
+        session()->forget('current_device_id');
+        return redirect("/")->with('success', 'Device session removed!');
+    }
 }
